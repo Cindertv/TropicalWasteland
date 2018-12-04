@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Shop : MonoBehaviour {
 
-	public TurretBlueprint standardTurret;
-	public TurretBlueprint missileLauncher;
-	public TurretBlueprint laserBeamer;
+	public TurretBlueprint fireTower;
+	public TurretBlueprint lightingTower;
+	public TurretBlueprint iceTower;
 
 	BuildManager buildManager;
 
@@ -13,22 +13,22 @@ public class Shop : MonoBehaviour {
 		buildManager = BuildManager.instance;
 	}
 
-	public void SelectStandardTurret ()
+	public void SelectFireTurret ()
 	{
-		Debug.Log("Standard Turret Selected");
-		buildManager.SelectTurretToBuild(standardTurret);
+		Debug.Log("Fire Tower Selected");
+		buildManager.SelectTurretToBuild(fireTower);
 	}
 
-	public void SelectMissileLauncher()
+	public void SelectLightningTower()
 	{
-		Debug.Log("Missile Launcher Selected");
-		buildManager.SelectTurretToBuild(missileLauncher);
+		Debug.Log("Lightning Tower Selected");
+		buildManager.SelectTurretToBuild(lightingTower);
 	}
 
-	public void SelectLaserBeamer()
+	public void SelectIceTower()
 	{
-		Debug.Log("Laser Beamer Selected");
-		buildManager.SelectTurretToBuild(laserBeamer);
+		Debug.Log("Ice Tower Selected");
+		buildManager.SelectTurretToBuild(iceTower);
 	}
 
 }

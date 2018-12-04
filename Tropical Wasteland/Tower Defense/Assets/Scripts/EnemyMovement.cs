@@ -2,8 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Enemy))]
+
 public class EnemyMovement : MonoBehaviour {
 
+    /// <summary>
+    /// Tells the enemy unit which waypoints to follow and at what speed and direction takes a point of life away when it reaches the end of the path
+    /// </summary>
 	private Transform target;
 	private int wavepointIndex = 0;
 
@@ -13,35 +17,35 @@ public class EnemyMovement : MonoBehaviour {
 	{
 		enemy = GetComponent<Enemy>();
 
-		target = Waypoints.points[0];
+		target = Waypoints.wayPoints[0];
 	}
 
 	void Update()
 	{
-		Vector3 dir = target.position - transform.position;
-		transform.Translate(dir.normalized * enemy.speed * Time.deltaTime, Space.World);
+		Vector3 direction = target.position - transform.position;
+		transform.Translate(direction.normalized * enemy.movementSpeed * Time.deltaTime, Space.World);
 
 		if (Vector3.Distance(transform.position, target.position) <= 0.4f)
 		{
-			GetNextWaypoint();
+			FindNewWaypoint();
 		}
 
-		enemy.speed = enemy.startSpeed;
+		enemy.movementSpeed = enemy.startMovementSpeed;
 	}
 
-	void GetNextWaypoint()
+	void FindNewWaypoint()
 	{
-		if (wavepointIndex >= Waypoints.points.Length - 1)
+		if (wavepointIndex >= Waypoints.wayPoints.Length - 1)
 		{
-			EndPath();
+			PathEndWaypoint();
 			return;
 		}
 
 		wavepointIndex++;
-		target = Waypoints.points[wavepointIndex];
+		target = Waypoints.wayPoints[wavepointIndex];
 	}
 
-	void EndPath()
+	void PathEndWaypoint()
 	{
 		PlayerStats.Lives--;
 		WaveSpawner.EnemiesAlive--;

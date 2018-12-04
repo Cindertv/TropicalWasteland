@@ -1,15 +1,17 @@
 using UnityEngine;
 
 public class Waypoints : MonoBehaviour {
-
-	public static Transform[] points;
+    /// <summary>
+    /// Gets the refrence to the waypoints in the game scene and let the enemies follow the pre defined path layed out
+    /// </summary>
+	public static Transform[] wayPoints;
 
 	void Awake ()
 	{
-		points = new Transform[transform.childCount];
-		for (int i = 0; i < points.Length; i++)
+		wayPoints = new Transform[transform.childCount];
+		for (int i = 0; i < wayPoints.Length; i++)
 		{
-			points[i] = transform.GetChild(i);
+			wayPoints[i] = transform.GetChild(i);
 		}
 	}
 

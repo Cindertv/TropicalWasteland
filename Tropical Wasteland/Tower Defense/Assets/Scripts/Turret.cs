@@ -3,20 +3,18 @@ using System.Collections;
 
 public class Turret : MonoBehaviour {
 
-	private Transform target;
+	private Transform enemyTarget;
 	private Enemy targetEnemy;
 
-	[Header("General")]
+	public float fireRange = 15f;
 
-	public float range = 15f;
-
-	[Header("Use Bullets (default)")]
+	[Header("Use Normal Attack")]
 	public GameObject bulletPrefab;
-	public float fireRate = 1f;
-	private float fireCountdown = 0f;
+	public float rateOfFire = 1f;
+	private float countDownFire = 0f;
 
-	[Header("Use Laser")]
-	public bool useLaser = false;
+	[Header("Use FrostRay")]
+	public bool useFrostRay = false;
 
 	public int damageOverTime = 30;
 	public float slowAmount = .5f;
@@ -36,40 +34,40 @@ public class Turret : MonoBehaviour {
 
 	
 	void Start () {
-		InvokeRepeating("UpdateTarget", 0f, 0.5f);
+		InvokeRepeating("FindClosestTarget", 0f, 0.5f);
 	}
 	
-	void UpdateTarget ()
+	void FindClosestTarget ()
 	{
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
 		float shortestDistance = Mathf.Infinity;
 		GameObject nearestEnemy = null;
 		foreach (GameObject enemy in enemies)
 		{
-			float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-			if (distanceToEnemy < shortestDistance)
+			float targetDistance = Vector3.Distance(transform.position, enemy.transform.position);
+			if (targetDistance < shortestDistance)
 			{
-				shortestDistance = distanceToEnemy;
+				shortestDistance = targetDistance;
 				nearestEnemy = enemy;
 			}
 		}
 
-		if (nearestEnemy != null && shortestDistance <= range)
+		if (nearestEnemy != null && shortestDistance <= fireRange)
 		{
-			target = nearestEnemy.transform;
+			enemyTarget = nearestEnemy.transform;
 			targetEnemy = nearestEnemy.GetComponent<Enemy>();
 		} else
 		{
-			target = null;
+			enemyTarget = null;
 		}
 
 	}
 
 	
 	void Update () {
-		if (target == null)
+		if (enemyTarget == null)
 		{
-			if (useLaser)
+			if (useFrostRay)
 			{
 				if (lineRenderer.enabled)
 				{
@@ -84,25 +82,25 @@ public class Turret : MonoBehaviour {
 
 		LockOnTarget();
 
-		if (useLaser)
+		if (useFrostRay)
 		{
 			Laser();
 		} else
 		{
-			if (fireCountdown <= 0f)
+			if (countDownFire <= 0f)
 			{
 				Shoot();
-				fireCountdown = 1f / fireRate;
+				countDownFire = 1f / rateOfFire;
 			}
 
-			fireCountdown -= Time.deltaTime;
+			countDownFire -= Time.deltaTime;
 		}
 
 	}
 
 	void LockOnTarget ()
 	{
-		Vector3 dir = target.position - transform.position;
+		Vector3 dir = enemyTarget.position - transform.position;
 		Quaternion lookRotation = Quaternion.LookRotation(dir);
 		Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
 		partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
@@ -121,11 +119,11 @@ public class Turret : MonoBehaviour {
 		}
 
 		lineRenderer.SetPosition(0, firePoint.position);
-		lineRenderer.SetPosition(1, target.position);
+		lineRenderer.SetPosition(1, enemyTarget.position);
 
-		Vector3 dir = firePoint.position - target.position;
+		Vector3 dir = firePoint.position - enemyTarget.position;
 
-		impactEffect.transform.position = target.position + dir.normalized;
+		impactEffect.transform.position = enemyTarget.position + dir.normalized;
 
 		impactEffect.transform.rotation = Quaternion.LookRotation(dir);
 	}
@@ -136,12 +134,12 @@ public class Turret : MonoBehaviour {
 		Bullet bullet = bulletGO.GetComponent<Bullet>();
 
 		if (bullet != null)
-			bullet.Seek(target);
+			bullet.Seek(enemyTarget);
 	}
 
 	void OnDrawGizmosSelected ()
 	{
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, range);
+		Gizmos.DrawWireSphere(transform.position, fireRange);
 	}
 }

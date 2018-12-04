@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 
-	public float startSpeed = 10f;
+	public float startMovementSpeed = 10f;
 
 	[HideInInspector]
-	public float speed;
+	public float movementSpeed;
 
 	public float startHealth = 100;
 	private float health;
@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour {
 
 	void Start ()
 	{
-		speed = startSpeed;
+		movementSpeed = startMovementSpeed;
 		health = startHealth;
 	}
 
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour {
 
 	public void Slow (float pct)
 	{
-		speed = startSpeed * (1f - pct);
+		movementSpeed = startMovementSpeed * (1f - pct);
 	}
 
 	void Die ()

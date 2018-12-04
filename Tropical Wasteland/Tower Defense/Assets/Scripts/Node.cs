@@ -3,26 +3,26 @@ using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour {
 
-	public Color hoverColor;
+	public Color mouseOverColor;
 	public Color notEnoughMoneyColor;
     public Vector3 positionOffset;
 
-	[HideInInspector]
+	
 	public GameObject turret;
-	[HideInInspector]
+	
 	public TurretBlueprint turretBlueprint;
-	[HideInInspector]
+	
 	public bool isUpgraded = false;
 
 	private Renderer rend;
-	private Color startColor;
+	private Color defaultColor;
 
 	BuildManager buildManager;
 
 	void Start ()
 	{
 		rend = GetComponent<Renderer>();
-		startColor = rend.material.color;
+		defaultColor = rend.material.color;
 
 		buildManager = BuildManager.instance;
     }
@@ -39,6 +39,7 @@ public class Node : MonoBehaviour {
 
 		if (turret != null)
 		{
+            Debug.Log("Can not build there");
 			buildManager.SelectNode(this);
 			return;
 		}
@@ -46,7 +47,7 @@ public class Node : MonoBehaviour {
 		if (!buildManager.CanBuild)
 			return;
 
-		BuildTurret(buildManager.GetTurretToBuild());
+		BuildTurret(buildManager.GetTowerToBuild());
 	}
 
 	void BuildTurret (TurretBlueprint blueprint)
@@ -59,22 +60,22 @@ public class Node : MonoBehaviour {
 
 		PlayerStats.Money -= blueprint.cost;
 
-		GameObject _turret = (GameObject)Instantiate(blueprint.prefab, GetBuildPosition(), Quaternion.identity);
+		GameObject _turret = Instantiate(blueprint.prefab, GetBuildPosition(), Quaternion.identity);
 		turret = _turret;
 
 		turretBlueprint = blueprint;
 
-		GameObject effect = (GameObject)Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
+		GameObject effect = Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
 		Destroy(effect, 5f);
 
-		Debug.Log("Turret build!");
+		Debug.Log("Tower build!");
 	}
 
 	public void UpgradeTurret ()
 	{
 		if (PlayerStats.Money < turretBlueprint.upgradeCost)
 		{
-			Debug.Log("Not enough money to upgrade that!");
+			Debug.Log("Not enough money ");
 			return;
 		}
 
@@ -92,7 +93,7 @@ public class Node : MonoBehaviour {
 
 		isUpgraded = true;
 
-		Debug.Log("Turret upgraded!");
+		Debug.Log("Tower upgraded!");
 	}
 
 	public void SellTurret ()
@@ -116,7 +117,7 @@ public class Node : MonoBehaviour {
 
 		if (buildManager.HasMoney)
 		{
-			rend.material.color = hoverColor;
+			rend.material.color = mouseOverColor;
 		} else
 		{
 			rend.material.color = notEnoughMoneyColor;
@@ -126,7 +127,7 @@ public class Node : MonoBehaviour {
 
 	void OnMouseExit ()
 	{
-		rend.material.color = startColor;
+		rend.material.color = defaultColor;
     }
 
 }

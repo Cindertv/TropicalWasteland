@@ -10,12 +10,13 @@ public class WaveSpawner : MonoBehaviour {
 
 	public Transform spawnPoint;
 
-	public float timeBetweenWaves = 5f;
-	private float countdown = 2f;
+	public float timeBetweenWaves = 10f;
+	private float countdown = 5f;
 
 	public GameManager gameManager;
 
 	private int waveIndex = 0;
+
 
 	void Update ()
 	{
@@ -53,7 +54,7 @@ public class WaveSpawner : MonoBehaviour {
 		for (int i = 0; i < wave.count; i++)
 		{
 			SpawnEnemy(wave.enemy);
-			yield return new WaitForSeconds(1f / wave.rate);
+			yield return new WaitForSeconds(1f);
 		}
 
 		waveIndex++;

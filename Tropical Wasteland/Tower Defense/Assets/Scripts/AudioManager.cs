@@ -52,14 +52,14 @@ public class AudioManager : MonoBehaviour
 	public void SetMusicVolume(float volume)
 	{
 		SetGroupVolume(musicVolume, volume);
-		//fill this in yourself
-	}
+        PlayerPrefs.SetFloat(musicVolume, volume);
+    }
 
 	public void SetSFXVolume(float volume)
 	{
 		SetGroupVolume(sfxVolume, volume);
-		//fill this in yourself
-	}
+        PlayerPrefs.SetFloat(sfxVolume, volume);
+    }
 
 	private void OnDestroy()
 	{

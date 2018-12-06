@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour {
 
 	public float speed = 70f;
 
-	public int damage = 50;
+	public int towerDamage = 50;
 
 	public float areaOfEffect = 0f;
 	public GameObject targetHitEffect;
@@ -72,7 +72,7 @@ public class Bullet : MonoBehaviour {
 
 		if (e != null)
 		{
-			e.TakeDamage(damage);
+			e.TakeDamage(towerDamage);
 		}
 	}
 

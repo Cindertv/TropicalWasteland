@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour {
 	public float startHealth = 100;
 	private float health;
 
-	public int worth = 50;
+	public int killValue = 50;
 
 	public GameObject deathEffect;
 
@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour {
 	{
 		isDead = true;
 
-		PlayerStats.Money += worth;
+		PlayerStats.Money += killValue;
 
 		GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
 		Destroy(effect, 5f);

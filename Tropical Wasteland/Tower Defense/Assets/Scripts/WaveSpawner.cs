@@ -3,15 +3,23 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour {
+    /// <summary>
+    /// Spawns enemy units each wave with a timer before the first wave starts and a timer between each wave
+    /// holds an array of the waypoints
+    /// Has a speed variable of how fast the enemies should spawn in the specific wave
+    /// Has predefind enenmy prefabs that you allocate in the inspector so show which enemie should spawn on which wave
+    /// Sets the value of how many enemy there should spawn each wave
+    /// Sets the value of how many waves there should be in a level 
+    /// </summary>
 
-	public static int EnemiesAlive = 0;
+    public static int amountOfEnemiesAlive = 0;
 
 	public Wave[] waves;
 
 	public Transform spawnPoint;
 
 	public float timeBetweenWaves = 10f;
-	private float countdown = 5f;
+	private float waveCountDown = 5f;
 
 	public GameManager gameManager;
 
@@ -20,7 +28,7 @@ public class WaveSpawner : MonoBehaviour {
 
 	void Update ()
 	{
-		if (EnemiesAlive > 0)
+		if (amountOfEnemiesAlive > 0)
 		{
 			return;
 		}
@@ -31,16 +39,16 @@ public class WaveSpawner : MonoBehaviour {
 			this.enabled = false;
 		}
 
-		if (countdown <= 0f)
+		if (waveCountDown <= 0f)
 		{
 			StartCoroutine(SpawnWave());
-			countdown = timeBetweenWaves;
+			waveCountDown = timeBetweenWaves;
 			return;
 		}
 
-		countdown -= Time.deltaTime;
+		waveCountDown -= Time.deltaTime;
 
-		countdown = Mathf.Clamp(countdown, 0f, Mathf.Infinity);
+		waveCountDown = Mathf.Clamp(waveCountDown, 0f, Mathf.Infinity);
 	}
 
 	IEnumerator SpawnWave ()
@@ -49,15 +57,16 @@ public class WaveSpawner : MonoBehaviour {
 
 		Wave wave = waves[waveIndex];
 
-		EnemiesAlive = wave.count;
+		amountOfEnemiesAlive = wave.amountOfEnemiesToSpawn;
 
-		for (int i = 0; i < wave.count; i++)
+		for (int i = 0; i < wave.amountOfEnemiesToSpawn; i++)
 		{
-			SpawnEnemy(wave.enemy);
+			SpawnEnemy(wave.enemyPrefab);
 			yield return new WaitForSeconds(1f);
 		}
 
 		waveIndex++;
+        
 	}
 
 	void SpawnEnemy (GameObject enemy)

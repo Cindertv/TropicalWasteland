@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour {
 
 	public GameObject deathEffect;
 
-	[Header("Unity Stuff")]
 	public Image healthBar;
 
 	private bool isDead = false;
@@ -34,7 +33,7 @@ public class Enemy : MonoBehaviour {
 
 		if (health <= 0 && !isDead)
 		{
-			Die();
+			EnemyDie();
 		}
 	}
 
@@ -43,7 +42,7 @@ public class Enemy : MonoBehaviour {
 		movementSpeed = startMovementSpeed * (1f - pct);
 	}
 
-	void Die ()
+	void EnemyDie ()
 	{
 		isDead = true;
 
@@ -52,7 +51,7 @@ public class Enemy : MonoBehaviour {
 		GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
 		Destroy(effect, 5f);
 
-		WaveSpawner.EnemiesAlive--;
+		WaveSpawner.amountOfEnemiesAlive--;
 
 		Destroy(gameObject);
 	}

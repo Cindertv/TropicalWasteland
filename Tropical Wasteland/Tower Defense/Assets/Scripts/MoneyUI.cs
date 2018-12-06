@@ -4,11 +4,11 @@ using System.Collections;
 
 public class MoneyUI : MonoBehaviour {
 
-	public Text moneyText;
+	public Text playerMoney;
 
 	
 	void Update ()
     {
-		moneyText.text = "$" + PlayerStats.Money.ToString();
+		playerMoney.text = "$" + PlayerStats.Money.ToString();
 	}
 }
